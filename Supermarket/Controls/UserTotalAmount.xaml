@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="Supermarket.Controls.UserTotalAmount"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Supermarket.Controls" xmlns:ctx="clr-namespace:Supermarket.ViewModels" xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:converter="clr-namespace:Supermarket.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <ctx:UserTotalAmountVM/>
+    </UserControl.DataContext>
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                <ComboBox x:Name="CashierComboBox" ItemsSource="{Binding CashierList}" DisplayMemberPath="Username" Width="200" Margin="0,0,10,0" Tag="{Binding ElementName=DatePicker}">
+                    <i:Interaction.Behaviors>
+                        <converter:SelectionChangedCommandBehavior Command="{Binding TotalAmountPerDayCommand}" />
+                    </i:Interaction.Behaviors>
+                </ComboBox>
+                <DatePicker  x:Name="DatePicker" SelectedDate="{Binding SelectedDate}" Width="200" Tag="{Binding ElementName=CashierComboBox}">
+                    <i:Interaction.Behaviors>
+                        <converter:DateChangedBehavior Command="{Binding TotalAmountPerDayCommand}" />
+                    </i:Interaction.Behaviors>
+                </DatePicker>
+            </StackPanel>
+            <ListBox ItemsSource="{Binding DailyTransactions}" Margin="10,10,0,0" Height="381">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding IssueDate, StringFormat='{}{0:dd/MM/yyyy}'}" Width="100"/>
+                            <TextBlock Text="{Binding TotalAmount, StringFormat='{}{0:C}'}" Width="100"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+    </Grid>
+</UserControl>
